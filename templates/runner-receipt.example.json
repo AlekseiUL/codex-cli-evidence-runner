@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "task_id": "YYYYMMDD-HHMM-short-slug",
+  "project_path": "/absolute/path/to/project",
+  "started_at": "YYYY-MM-DDTHH:MM:SS+04:00",
+  "finished_at": "YYYY-MM-DDTHH:MM:SS+04:00",
+  "preflight": {
+    "git_status_before": "clean|dirty|not-a-git-repo",
+    "base_commit_or_snapshot": "commit-hash-or-snapshot-path",
+    "package_manager": "npm|pnpm|uv|pip|go|cargo|none|unknown",
+    "test_commands_detected": []
+  },
+  "codex": {
+    "command": "HOME=$HOME codex exec ...",
+    "model": "gpt-5.5",
+    "reasoning_effort": "xhigh",
+    "exit_code": 0
+  },
+  "changes": {
+    "changed_files": [],
+    "outside_allowed_paths": [],
+    "diff_path": "diff.patch"
+  },
+  "verification": {
+    "diff_reviewed": true,
+    "commands": [
+      {"cmd": "pytest -q", "exit_code": 0, "summary": "passed"}
+    ],
+    "secret_scan": "pass",
+    "runner_verified_not_codex_claim": true
+  },
+  "rollback": {
+    "method": "git reverse patch|git restore|snapshot restore|not possible",
+    "command": "git apply -R diff.patch",
+    "possible": true
+  },
+  "report_path": "report.md",
+  "main_risk": "none"
+}

@@ -1,0 +1,20 @@
+{
+  "task_id": "YYYYMMDD-HHMM-short-slug",
+  "originating_agent": "mike",
+  "return_to": "mike",
+  "scenario_class": "implementation",
+  "project_path": "/absolute/path/to/project",
+  "goal": "Implement the requested bounded change and leave verified artifacts.",
+  "execution_lane": "Codex-CLI",
+  "allowed_paths": ["src/**", "tests/**", "README.md"],
+  "forbidden_paths": [".env", "secrets/**", "~/.ssh/**", "~/.config/**"],
+  "privacy_level": "public-team",
+  "side_effect_policy": "local-only/no-push/no-deploy/no-public-send",
+  "acceptance_checks": ["tests pass or explicit no-tests reason", "diff reviewed", "no files changed outside allowed paths"],
+  "verification_commands": ["pytest -q"],
+  "artifact_bundle_required": true,
+  "receipt_required": true,
+  "rollback_required": true,
+  "report_path": "agents/walter/runs/YYYYMMDD-HHMM-short-slug/report.md",
+  "notes": "Specialist-facing task text goes here. Walter turns this into prompt.md."
+}

@@ -1,0 +1,54 @@
+# Walter runner policy template
+# Copy into agents/walter/runs/<timestamp>/policy.yaml and narrow it per run.
+
+default_work_root: ./workspace-repo
+
+codex:
+  model: gpt-5.5
+  reasoning_effort: xhigh
+  command_mode: exec
+  pty_required: true
+  sdk_lanes: retired
+
+safety:
+  require_git_or_snapshot: true
+  # Exception: read-only/report-only smoke runs may write only inside their run bundle
+  # without project git/snapshot, if receipt explicitly states no project mutation.
+  allow_run_dir_only_report_exception: true
+  prefer_worktree_or_sandbox: true
+  deny_secrets: true
+  deny_external_side_effects_without_approval: true
+  deny_public_send_without_approval: true
+  deny_deploy_without_approval: true
+  deny_delete_or_prune_without_approval: true
+  max_runtime_minutes: 60
+
+verification:
+  require_diff_review: true
+  require_changed_file_boundary_check: true
+  require_tests_or_explicit_no_tests_reason: true
+  require_smoke_or_explicit_no_smoke_reason: true
+  require_secret_scan_for_artifacts: true
+  require_receipt: true
+  codex_self_report_is_not_proof: true
+
+artifact_bundle:
+  required_files:
+    - input.json
+    - policy.yaml
+    - prompt.md
+    - codex.log
+    - diff.patch
+    - verify.log
+    - receipt.json
+    - report.md
+
+verdicts:
+  pass: PASS
+  pass_with_risks: PASS_WITH_RISKS
+  fail_verification: FAIL_VERIFICATION
+  needs_approval: NEEDS_APPROVAL
+  out_of_scope_change: OUT_OF_SCOPE_CHANGE
+  blocked: BLOCKED
+  failed: FAILED
+  rejected: REJECTED

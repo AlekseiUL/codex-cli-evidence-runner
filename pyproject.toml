@@ -1,0 +1,23 @@
+[project]
+name = "walter-codex-runner"
+version = "0.1.0"
+description = "Guarded Codex CLI runner that produces auditable evidence receipts"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Walter Codex Runner contributors" }]
+keywords = ["codex", "ai-agents", "runner", "verification", "receipts"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development :: Quality Assurance",
+]
+
+[tool.setuptools]
+packages = []
+
+[tool.walter]
+default-test-command = "python3 -m unittest discover -s tests -p 'test_*.py' -v"
