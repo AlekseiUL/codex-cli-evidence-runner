@@ -1,12 +1,12 @@
 [project]
-name = "walter-codex-runner"
+name = "codex-evidence-runner"
 version = "0.1.0"
-description = "Guarded Codex CLI runner that produces auditable evidence receipts"
+description = "Guarded Codex CLI runner for auditable evidence bundles, receipts, verification logs, and dry-run apply gates"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-authors = [{ name = "Walter Codex Runner contributors" }]
-keywords = ["codex", "ai-agents", "runner", "verification", "receipts"]
+authors = [{ name = "Aleksei Ulianov / Sprut_AI" }]
+keywords = ["codex", "codex-cli", "ai-agents", "runner", "verification", "receipts", "evidence", "worktree"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
