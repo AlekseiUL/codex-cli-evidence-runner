@@ -1,6 +1,6 @@
-# Codex Evidence Runner
+# Codex CLI Evidence Runner
 
-**Codex Evidence Runner** is a guarded runner for OpenAI Codex CLI. It turns an AI coding run into an auditable evidence bundle before anyone accepts or applies the patch.
+**Codex CLI Evidence Runner** is a guarded runner for OpenAI Codex CLI. It turns an AI coding run into an auditable evidence bundle before anyone accepts or applies the patch.
 
 Tagline: **Codex says done. Make it show the proof.**
 
@@ -24,7 +24,7 @@ This repository focuses on that narrow gap. It is not another IDE, not a multi-a
 
 ## Who this is for
 
-Codex Evidence Runner is for:
+Codex CLI Evidence Runner is for:
 
 - developers who use Codex CLI for real repository changes;
 - teams that want reviewable proof before accepting AI-generated patches;
@@ -155,7 +155,7 @@ A low score means the run should not be applied. Common reasons: missing receipt
 
 ## Safety boundary
 
-Codex Evidence Runner does not:
+Codex CLI Evidence Runner does not:
 
 - deploy to production;
 - post or send messages from your accounts;
@@ -195,7 +195,7 @@ The runner code, templates, fake-Codex fixtures and tests are present. The curre
 
 This project is maintained by Aleksei Ulianov / Sprut_AI.
 
-Original repository: https://github.com/AlekseiUL/codex-evidence-runner
+Original repository: https://github.com/AlekseiUL/codex-cli-evidence-runner
 
 If you found this project mirrored, repackaged, or redistributed elsewhere, check this repository as the source of truth.
 
@@ -211,7 +211,7 @@ MIT. See `LICENSE`.
 
 # Русская версия
 
-**Codex Evidence Runner** - это безопасный runner для OpenAI Codex CLI. Он нужен для простой вещи: Codex не должен считаться закончившим работу только потому, что написал `done`.
+**Codex CLI Evidence Runner** - это безопасный runner для OpenAI Codex CLI. Он нужен для простой вещи: Codex не должен считаться закончившим работу только потому, что написал `done`.
 
 Сначала доказательства. Потом принятие патча.
 
@@ -342,7 +342,7 @@ runs/<timestamp-or-slug>/
 
 ## Границы безопасности
 
-Codex Evidence Runner не делает:
+Codex CLI Evidence Runner не делает:
 
 - production deploy;
 - отправку сообщений из ваших аккаунтов;
@@ -370,7 +370,7 @@ Codex Evidence Runner не делает:
 
 Проект поддерживает Aleksei Ulianov / Sprut_AI.
 
-Оригинальный репозиторий: https://github.com/AlekseiUL/codex-evidence-runner
+Оригинальный репозиторий: https://github.com/AlekseiUL/codex-cli-evidence-runner
 
 Если вы нашли копию, mirror или переупаковку, сверяйтесь с этим репозиторием как с источником.
 

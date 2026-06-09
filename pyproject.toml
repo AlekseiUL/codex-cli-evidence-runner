@@ -1,5 +1,5 @@
 [project]
-name = "codex-evidence-runner"
+name = "codex-cli-evidence-runner"
 version = "0.1.0"
 description = "Guarded Codex CLI runner for auditable evidence bundles, receipts, verification logs, and dry-run apply gates"
 readme = "README.md"

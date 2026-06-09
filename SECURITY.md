@@ -2,7 +2,7 @@
 
 ## Supported scope
 
-Codex Evidence Runner is a local-first guarded runner for OpenAI Codex CLI. Security reports are in scope when they relate to:
+Codex CLI Evidence Runner is a local-first guarded runner for OpenAI Codex CLI. Security reports are in scope when they relate to:
 
 - leaking secrets or private paths through runner artifacts;
 - unsafe diff application;
@@ -20,7 +20,7 @@ The project does not handle production deploys, account posting, payments, billi
 
 Please report issues through the canonical repository:
 
-https://github.com/AlekseiUL/codex-evidence-runner
+https://github.com/AlekseiUL/codex-cli-evidence-runner
 
 If the repository is private during staging, report the issue directly to the maintainer who gave you access.
 

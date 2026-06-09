@@ -1,8 +1,8 @@
 # NOTICE
 
-Codex Evidence Runner is maintained by Aleksei Ulianov / Sprut_AI.
+Codex CLI Evidence Runner is maintained by Aleksei Ulianov / Sprut_AI.
 
-Canonical source: https://github.com/AlekseiUL/codex-evidence-runner
+Canonical source: https://github.com/AlekseiUL/codex-cli-evidence-runner
 
 ## Attribution
 
