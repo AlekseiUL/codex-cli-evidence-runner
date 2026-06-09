@@ -14,5 +14,9 @@ jobs:
           python-version: '3.11'
       - name: Runner tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: CLI help smoke
+        run: |
+          scripts/walter --help
+          scripts/walter run-safe --goal 'CI dry-run smoke' --project-path workspace-repo --allowed-path 'src/**' --verification-command 'python3 -m unittest discover -s tests -v' --dry-run --print-command
       - name: Workspace helper tests
         run: python -m unittest discover -s workspace-repo/tests -v

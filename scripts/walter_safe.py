@@ -615,7 +615,10 @@ def cmd_endurance_plan(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Safe convenience wrapper for Walter/Codex runs")
+    parser = argparse.ArgumentParser(
+        prog="codex-cli-evidence-runner",
+        description="Safe convenience wrapper for Codex CLI evidence runs",
+    )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     run_safe = sub.add_parser("run-safe", help="run Walter runner + receipt validation + Nacho gate")
