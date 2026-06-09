@@ -396,12 +396,12 @@ Codex CLI Evidence Runner не делает:
 
 ## Threat model и ограничения
 
-Runner не является жёстким sandbox.
+Runner - не жёсткий sandbox.
 
 - В реальном `--full-auto` запуске Codex CLI может выполнять локальные shell-команды. Запускайте его в disposable или reviewable repo.
 - Полный `PASS` рассчитан на git repo/worktree. Для non-git проектов доказательство границ слабее, поэтому используется `PASS_WITH_RISKS`.
 - Secret scan эвристический: он ищет секретоподобные строки в артефактах runner и изменённых файлах. Это не замена gitleaks/trufflehog.
-- Outside-read scan смотрит на логи Codex. Он ловит подозрительные пути в transcript, но не является syscall audit.
+- Outside-read scan смотрит на логи Codex. Он ловит подозрительные пути в transcript, но не даёт syscall audit.
 - `apply-diff CHECK_PASS` значит, что patch применим технически. Это не значит, что patch правильный.
 - Runner сам не ставит `diff_reviewed: true`. Он фиксирует diff и показывает, нужен ли review.
 
