@@ -107,6 +107,47 @@ def git_output(project_path: Path, *args: str) -> str:
     return out.strip()
 
 
+def git_status_state(project_path: Path) -> dict[str, Any]:
+    if not is_git_repo(project_path):
+        return {"state": "not-a-git-repo", "porcelain": "", "changed_files": []}
+    code, out = run_capture(["git", "status", "--porcelain"], project_path)
+    if code != 0:
+        return {"state": "unknown", "porcelain": out.strip(), "changed_files": []}
+    changed = git_changed_files(project_path)
+    return {"state": "dirty" if out.strip() else "clean", "porcelain": out.strip(), "changed_files": changed}
+
+
+def detect_package_manager(project_path: Path) -> str:
+    markers = [
+        ("pnpm-lock.yaml", "pnpm"),
+        ("yarn.lock", "yarn"),
+        ("package-lock.json", "npm"),
+        ("package.json", "npm"),
+        ("uv.lock", "uv"),
+        ("pyproject.toml", "python"),
+        ("requirements.txt", "pip"),
+        ("go.mod", "go"),
+        ("Cargo.toml", "cargo"),
+    ]
+    for marker, manager in markers:
+        if (project_path / marker).exists():
+            return manager
+    return "unknown"
+
+
+def detect_test_commands(project_path: Path) -> list[str]:
+    commands: list[str] = []
+    if (project_path / "pytest.ini").exists() or (project_path / "tests").exists():
+        commands.append("python3 -m unittest discover -s tests -p 'test_*.py' -v")
+    if (project_path / "package.json").exists():
+        commands.append("npm test")
+    if (project_path / "go.mod").exists():
+        commands.append("go test ./...")
+    if (project_path / "Cargo.toml").exists():
+        commands.append("cargo test")
+    return commands
+
+
 def create_git_worktree(project_path: Path, run_dir: Path) -> tuple[Path, dict[str, Any]]:
     """Create a detached git worktree inside the run dir.
 
@@ -514,6 +555,16 @@ def cmd_run(args: argparse.Namespace) -> int:
         print(f"RUN FAIL: project path does not exist: {project_path}")
         return 1
     preflight["git_repo"] = is_git_repo(project_path)
+    source_git_status = git_status_state(project_path)
+    preflight["git_status_before"] = source_git_status["state"]
+    preflight["git_status_porcelain_before"] = source_git_status["porcelain"]
+    preflight["dirty_files_before"] = source_git_status["changed_files"]
+    preflight["base_commit_or_snapshot"] = git_output(project_path, "rev-parse", "HEAD") if preflight["git_repo"] else "filesystem-snapshot"
+    preflight["package_manager"] = detect_package_manager(project_path)
+    preflight["test_commands_detected"] = detect_test_commands(project_path)
+    if args.worktree and preflight["git_repo"] and source_git_status["state"] == "dirty":
+        print("RUN FAIL: source checkout is dirty; commit/stash changes or run without --worktree with explicit risk acceptance")
+        return 1
 
     execution_path = project_path
     worktree_info: dict[str, Any] = {"enabled": False}
@@ -563,7 +614,11 @@ def cmd_run(args: argparse.Namespace) -> int:
         append_log(codex_log, "SKIPPED_BY_RUNNER --skip-codex")
     else:
         env = os.environ.copy()
-        env.setdefault("HOME", str(Path.home()))
+        codex_home = Path(args.codex_home).expanduser().resolve() if args.codex_home else Path.home()
+        env["HOME"] = str(codex_home)
+        preflight["codex_home"] = str(codex_home)
+        preflight["pty_requested"] = bool(args.pty)
+        preflight["pty_used"] = False
         try:
             proc = subprocess.run(
                 codex_cmd,
@@ -696,7 +751,9 @@ def cmd_run(args: argparse.Namespace) -> int:
         },
         "verification": {
             "runner_verified_not_codex_claim": True,
-            "diff_reviewed": True,
+            "diff_captured": diff_ok,
+            "diff_review_required": bool(changed_files),
+            "diff_reviewed": False,
             "verification_commands_ok": verification_ok,
             "verification_results": verification_results,
             "commands": verification_results,
@@ -774,6 +831,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_run.add_argument("--model", default="gpt-5.5")
     p_run.add_argument("--reasoning-effort", default="xhigh")
     p_run.add_argument("--codex-command", default="codex")
+    p_run.add_argument("--codex-home", help="HOME directory for Codex CLI auth/config; defaults to current process HOME")
+    p_run.add_argument("--pty", action="store_true", help="record PTY intent in preflight; execution is still non-PTY subprocess mode")
     p_run.add_argument("--timeout", type=int, default=3600, help="Codex execution timeout in seconds")
     p_run.add_argument("--verification-timeout", type=int, default=600, help="timeout per verification command in seconds")
     p_run.add_argument("--worktree", action="store_true", help="run Codex in a detached git worktree under the run dir")

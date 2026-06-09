@@ -95,6 +95,10 @@ def build_runner_cmd(args: argparse.Namespace, run_dir: Path, project: Path) -> 
         cmd += ["--verification-command", verify]
     for check in args.acceptance_check or DEFAULT_ACCEPTANCE:
         cmd += ["--acceptance-check", check]
+    if args.codex_home:
+        cmd += ["--codex-home", args.codex_home]
+    if args.pty:
+        cmd.append("--pty")
     if not args.no_worktree:
         cmd.append("--worktree")
     if args.skip_codex:
@@ -627,6 +631,8 @@ def build_parser() -> argparse.ArgumentParser:
     run_safe.add_argument("--model", default="gpt-5.5")
     run_safe.add_argument("--reasoning-effort", default="xhigh")
     run_safe.add_argument("--codex-command", default="codex")
+    run_safe.add_argument("--codex-home", help="HOME directory for Codex CLI auth/config; defaults to current process HOME")
+    run_safe.add_argument("--pty", action="store_true", help="record PTY intent in runner preflight; execution is non-PTY subprocess mode")
     run_safe.add_argument("--timeout", type=int, default=560, help="Codex execution timeout in seconds")
     run_safe.add_argument("--verification-timeout", type=int, default=600, help="timeout per verification command in seconds")
     run_safe.add_argument("--runner-timeout", type=int, help="parent wrapper timeout; default = codex + verification budgets + 300s")

@@ -2,38 +2,74 @@
   "status": "PASS",
   "task_id": "YYYYMMDD-HHMM-short-slug",
   "project_path": "/absolute/path/to/project",
-  "started_at": "YYYY-MM-DDTHH:MM:SS+04:00",
-  "finished_at": "YYYY-MM-DDTHH:MM:SS+04:00",
+  "execution_path": "/absolute/path/to/run/worktree",
+  "started_at": "YYYY-MM-DDTHH:MM:SS+00:00",
+  "finished_at": "YYYY-MM-DDTHH:MM:SS+00:00",
   "preflight": {
-    "git_status_before": "clean|dirty|not-a-git-repo",
-    "base_commit_or_snapshot": "commit-hash-or-snapshot-path",
-    "package_manager": "npm|pnpm|uv|pip|go|cargo|none|unknown",
-    "test_commands_detected": []
+    "input_valid": true,
+    "project_exists": true,
+    "project_path": "/absolute/path/to/project",
+    "execution_path": "/absolute/path/to/run/worktree",
+    "git_repo": true,
+    "git_status_before": "clean",
+    "git_status_porcelain_before": "",
+    "dirty_files_before": [],
+    "base_commit_or_snapshot": "commit-hash",
+    "package_manager": "python",
+    "test_commands_detected": ["python3 -m unittest discover -s tests -p 'test_*.py' -v"],
+    "worktree_requested": true,
+    "worktree": {
+      "enabled": true,
+      "path": "/absolute/path/to/run/worktree",
+      "base_commit": "commit-hash",
+      "cleanup_command": "git -C /absolute/path/to/project worktree remove /absolute/path/to/run/worktree"
+    },
+    "codex_available": true,
+    "codex_home": "/absolute/path/to/home",
+    "pty_requested": false,
+    "pty_used": false
   },
   "codex": {
-    "command": "HOME=$HOME codex exec ...",
+    "command": "codex exec --skip-git-repo-check --full-auto -m gpt-5.5 -c model_reasoning_effort=xhigh < prompt.md",
     "model": "gpt-5.5",
     "reasoning_effort": "xhigh",
-    "exit_code": 0
+    "prompt_path": "prompt.md",
+    "exit_code": 0,
+    "timed_out": false,
+    "timeout_seconds": 3600,
+    "log_path": "codex.log"
   },
   "changes": {
-    "changed_files": [],
+    "change_detection": "git_status_worktree",
+    "diff_available": true,
+    "diff_path": "diff.patch",
+    "changed_files": ["src/example.py"],
     "outside_allowed_paths": [],
-    "diff_path": "diff.patch"
+    "forbidden_changed_paths": []
   },
   "verification": {
-    "diff_reviewed": true,
-    "commands": [
-      {"cmd": "pytest -q", "exit_code": 0, "summary": "passed"}
+    "runner_verified_not_codex_claim": true,
+    "diff_captured": true,
+    "diff_review_required": true,
+    "diff_reviewed": false,
+    "verification_commands_ok": true,
+    "verification_results": [
+      {"command": "python3 -m unittest discover -s tests -v", "exit_code": 0, "timed_out": false}
     ],
-    "secret_scan": "pass",
-    "runner_verified_not_codex_claim": true
+    "commands": [
+      {"command": "python3 -m unittest discover -s tests -v", "exit_code": 0, "timed_out": false}
+    ],
+    "verification_timeout_seconds": 600,
+    "secret_scan": "PASS",
+    "secret_scan_hits": [],
+    "outside_project_read_scan": "PASS",
+    "outside_project_read_hits": []
   },
   "rollback": {
-    "method": "git reverse patch|git restore|snapshot restore|not possible",
-    "command": "git apply -R diff.patch",
-    "possible": true
+    "possible": true,
+    "method": "git worktree discard",
+    "command": "git -C /absolute/path/to/project worktree remove /absolute/path/to/run/worktree",
+    "instructions": "Review diff.patch first. In worktree mode, original project checkout is untouched; remove the worktree only after extracting/applying the approved diff."
   },
-  "report_path": "report.md",
-  "main_risk": "none"
+  "report_path": "report.md"
 }

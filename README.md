@@ -4,6 +4,8 @@
 
 Tagline: **Codex says done. Make it show the proof.**
 
+Current state: `v0.1.0` alpha / private staging. The repo is usable as a cloned script runner today. It is not packaged as a `pipx install` or PyPI CLI yet.
+
 ```text
 preflight -> scoped Codex run -> logs + diff -> verification -> receipt -> safety gate -> score -> optional dry-run apply
 ```
@@ -67,6 +69,18 @@ flowchart LR
 - Codex CLI for real runs: `codex`
 
 The test suite uses only the Python standard library and a fake Codex fixture.
+
+## Install model
+
+Today this is a clone-and-run repository:
+
+```bash
+git clone https://github.com/AlekseiUL/codex-cli-evidence-runner.git
+cd codex-cli-evidence-runner
+scripts/walter --help
+```
+
+There is no published package yet. That is intentional for `v0.1.0` private staging; the next public hardening step is a normal console entrypoint and install smoke.
 
 ## Quick start
 
@@ -166,6 +180,17 @@ Codex CLI Evidence Runner does not:
 
 Use it as a review gate, not as an autopilot.
 
+## Threat model and limitations
+
+This runner is a guardrail and evidence layer, not a hard sandbox.
+
+- Codex CLI can still execute local shell commands during a real `--full-auto` run. Scope it to disposable or reviewable repositories.
+- Full `PASS` is intended for git repositories/worktrees. Non-git projects are treated as `PASS_WITH_RISKS` because boundary proof is weaker.
+- Secret scanning is heuristic and catches secret-looking strings in runner artifacts and changed files. It is not a replacement for dedicated scanners such as gitleaks or trufflehog.
+- Outside-project read detection is log-based. It catches suspicious paths visible in Codex transcripts; it is not a syscall audit.
+- `apply-diff CHECK_PASS` means the patch can be applied cleanly. It does not mean the patch is correct. Human or foreman review still matters.
+- `diff_reviewed` is not set by the runner. The runner captures the diff and marks whether review is required.
+
 ## Repository hygiene
 
 `runs/` is ignored except for `.gitkeep`. Do not commit real run logs, receipts, prompts, worktrees, credentials, local cache files, private project paths, or internal operational reports.
@@ -214,6 +239,8 @@ MIT. See `LICENSE`.
 **Codex CLI Evidence Runner** - это безопасный runner для OpenAI Codex CLI. Он нужен для простой вещи: Codex не должен считаться закончившим работу только потому, что написал `done`.
 
 Сначала доказательства. Потом принятие патча.
+
+Текущий статус: `v0.1.0` alpha / private staging. Сейчас это repo, который клонируют и запускают через `scripts/walter`. Нормального `pipx install` / PyPI-пакета пока нет, и это честно вынесено в ограничения.
 
 ```text
 preflight -> запуск Codex в ограниченном контуре -> логи и diff -> проверка -> receipt -> safety gate -> score -> apply через dry-run
@@ -274,6 +301,20 @@ flowchart LR
 ```
 
 ## Быстрый старт
+
+Требования:
+
+- Python 3.11+
+- `git`
+- Codex CLI для реальных запусков: `codex`
+
+Сейчас установка выглядит так:
+
+```bash
+git clone https://github.com/AlekseiUL/codex-cli-evidence-runner.git
+cd codex-cli-evidence-runner
+scripts/walter --help
+```
 
 Проверить сам репозиторий:
 
@@ -352,6 +393,17 @@ Codex CLI Evidence Runner не делает:
 - destructive cleanup без явного run id и подтверждения.
 
 Это review gate. Не автопилот.
+
+## Threat model и ограничения
+
+Runner не является жёстким sandbox.
+
+- В реальном `--full-auto` запуске Codex CLI может выполнять локальные shell-команды. Запускайте его в disposable или reviewable repo.
+- Полный `PASS` рассчитан на git repo/worktree. Для non-git проектов доказательство границ слабее, поэтому используется `PASS_WITH_RISKS`.
+- Secret scan эвристический: он ищет секретоподобные строки в артефактах runner и изменённых файлах. Это не замена gitleaks/trufflehog.
+- Outside-read scan смотрит на логи Codex. Он ловит подозрительные пути в transcript, но не является syscall audit.
+- `apply-diff CHECK_PASS` значит, что patch применим технически. Это не значит, что patch правильный.
+- Runner сам не ставит `diff_reviewed: true`. Он фиксирует diff и показывает, нужен ли review.
 
 ## Текущий статус
 

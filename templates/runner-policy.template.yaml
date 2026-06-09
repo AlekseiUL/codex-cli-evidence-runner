@@ -7,7 +7,9 @@ codex:
   model: gpt-5.5
   reasoning_effort: xhigh
   command_mode: exec
-  pty_required: true
+  # This public runner captures Codex through a bounded non-PTY subprocess.
+  # Use --pty only to record PTY intent in receipts; it is not a PTY execution mode yet.
+  pty_required: false
   sdk_lanes: retired
 
 safety:
