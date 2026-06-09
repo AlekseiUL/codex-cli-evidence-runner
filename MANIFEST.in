@@ -1,0 +1,9 @@
+include README.md
+include LICENSE
+include NOTICE.md
+include SECURITY.md
+recursive-include docs/assets *.svg *.jpg
+recursive-include templates *.json *.yaml *.md
+recursive-include scripts walter *.py
+recursive-include tests *.py
+recursive-include workspace-repo *.md *.py

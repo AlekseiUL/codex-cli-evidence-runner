@@ -4,13 +4,12 @@ version = "0.1.0"
 description = "Guarded Codex CLI runner for auditable evidence bundles, receipts, verification logs, and dry-run apply gates"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = "MIT"
 authors = [{ name = "Aleksei Ulianov / Sprut_AI" }]
 keywords = ["codex", "codex-cli", "ai-agents", "runner", "verification", "receipts", "evidence", "worktree"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
   "Topic :: Software Development :: Quality Assurance",

@@ -4,6 +4,10 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Status: v0.1.0 alpha](https://img.shields.io/badge/status-v0.1.0%20alpha-blue.svg)
 
+![Codex CLI Evidence Runner hero: a lab-style coding experiment where Codex CLI output must pass evidence checks before a pull request is trusted.](docs/assets/codex-cli-evidence-runner-hero.jpg)
+
+_Visual metaphor only: this is not a benchmark claim, certification, or affiliation statement._
+
 ![Codex CLI Evidence Runner flow: task contract, scoped Codex CLI run, evidence bundle, safety gate, score, and human review before applying a patch.](docs/assets/codex-cli-evidence-runner-flow.svg)
 
 **Codex CLI Evidence Runner** is a guarded runner for OpenAI Codex CLI. It turns an AI coding run into an auditable evidence bundle before anyone accepts or applies the patch.

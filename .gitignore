@@ -9,3 +9,6 @@ secrets/
 runs/*
 !runs/.gitkeep
 *.log
+*.egg-info/
+build/
+dist/

@@ -16,6 +16,7 @@ It should not contain real run logs, private prompts, local absolute paths, cred
 
 Public artwork included:
 
+- `docs/assets/codex-cli-evidence-runner-hero.jpg` - project-owner-supplied public promotional artwork for the README. It is a visual metaphor only, not a benchmark claim, certification, endorsement, or affiliation statement.
 - `docs/assets/codex-cli-evidence-runner-flow.svg` - product flow diagram for the README.
 
 ## Third-party note
