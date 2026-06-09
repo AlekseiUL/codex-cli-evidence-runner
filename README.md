@@ -1,10 +1,16 @@
 # Codex CLI Evidence Runner
 
+[![CI](https://github.com/AlekseiUL/codex-cli-evidence-runner/actions/workflows/ci.yml/badge.svg)](https://github.com/AlekseiUL/codex-cli-evidence-runner/actions/workflows/ci.yml)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Status: v0.1.0 alpha](https://img.shields.io/badge/status-v0.1.0%20alpha-blue.svg)
+
+![Codex CLI Evidence Runner flow: task contract, scoped Codex CLI run, evidence bundle, safety gate, score, and human review before applying a patch.](docs/assets/codex-cli-evidence-runner-flow.svg)
+
 **Codex CLI Evidence Runner** is a guarded runner for OpenAI Codex CLI. It turns an AI coding run into an auditable evidence bundle before anyone accepts or applies the patch.
 
 Tagline: **Codex says done. Make it show the proof.**
 
-Current state: `v0.1.0` alpha / private staging. The repo is usable as a cloned script runner today. It is not packaged as a `pipx install` or PyPI CLI yet.
+Current state: `v0.1.0` public alpha. The repo is usable as a cloned script runner today. It is not packaged as a `pipx install` or PyPI CLI yet.
 
 ```text
 preflight -> scoped Codex run -> logs + diff -> verification -> receipt -> safety gate -> score -> optional dry-run apply
@@ -23,6 +29,19 @@ Codex CLI can edit fast, but its final message is not proof. A useful coding age
 - whether the diff can be applied through a dry-run gate.
 
 This repository focuses on that narrow gap. It is not another IDE, not a multi-agent desktop, and not a replacement for Codex. It is a small evidence layer around Codex CLI.
+
+## What makes it different
+
+Many Codex-related tools focus on launching more agents, running them in parallel, or giving them a nicer interface.
+
+This runner focuses on a different question: **what proof exists after the agent says it is done?**
+
+It is built around four practical ideas:
+
+- Codex self-report is not proof;
+- every serious run should leave a diff, logs, checks and a receipt;
+- risky changes should fail closed before `apply`;
+- a human or foreman should review evidence, not guess from a chat transcript.
 
 ## Who this is for
 
@@ -44,9 +63,23 @@ It is not for one-click production automation. If you want an agent to deploy, p
 - scans artifacts for secret-looking output;
 - scans Codex logs for suspicious outside-project reads;
 - checks changed files against allowed and forbidden paths;
+- blocks dirty source checkouts before worktree runs;
+- records base commit, package-manager hints and detected test commands;
 - scores evidence quality from 0 to 100;
 - applies diffs only through a dry-run-first gate;
 - keeps generated run artifacts out of git by default.
+
+## What the runner proves
+
+It can prove:
+
+- which files changed;
+- whether the changed files stayed inside allowed paths;
+- whether configured verification commands passed;
+- whether the artifact bundle has the expected receipt/report shape;
+- whether the patch can be applied cleanly through the dry-run gate.
+
+It does not prove that the patch is correct by itself. The final decision still needs human or foreman review.
 
 ## Operating flow
 
@@ -80,7 +113,7 @@ cd codex-cli-evidence-runner
 scripts/walter --help
 ```
 
-There is no published package yet. That is intentional for `v0.1.0` private staging; the next public hardening step is a normal console entrypoint and install smoke.
+There is no published package yet. That is intentional for `v0.1.0` public alpha; the next hardening step is a normal console entrypoint and install smoke.
 
 ## Quick start
 
@@ -238,9 +271,11 @@ MIT. See `LICENSE`.
 
 **Codex CLI Evidence Runner** - это безопасный runner для OpenAI Codex CLI. Он нужен для простой вещи: Codex не должен считаться закончившим работу только потому, что написал `done`.
 
+![Схема работы Codex CLI Evidence Runner: задача, запуск Codex CLI в ограниченном worktree, evidence bundle, safety gate, score и ручное решение перед применением patch.](docs/assets/codex-cli-evidence-runner-flow.svg)
+
 Сначала доказательства. Потом принятие патча.
 
-Текущий статус: `v0.1.0` alpha / private staging. Сейчас это repo, который клонируют и запускают через `scripts/walter`. Нормального `pipx install` / PyPI-пакета пока нет, и это честно вынесено в ограничения.
+Текущий статус: `v0.1.0` public alpha. Сейчас это repo, который клонируют и запускают через `scripts/walter`. Нормального `pipx install` / PyPI-пакета пока нет, и это честно вынесено в ограничения.
 
 ```text
 preflight -> запуск Codex в ограниченном контуре -> логи и diff -> проверка -> receipt -> safety gate -> score -> apply через dry-run
@@ -262,6 +297,19 @@ preflight -> запуск Codex в ограниченном контуре -> л
 
 Этот репозиторий закрывает именно этот участок. Он не заменяет Codex CLI и не пытается быть большим IDE. Это слой доказательств и проверки вокруг Codex.
 
+## Чем отличается
+
+Многие инструменты вокруг Codex делают упор на другое: запустить больше агентов, развести их по worktree или дать удобный интерфейс.
+
+Здесь фокус другой: **какие доказательства остались после того, как агент сказал “готово”?**
+
+Логика простая:
+
+- self-report Codex не считается доказательством;
+- серьёзный запуск должен оставить diff, логи, проверки и receipt;
+- рискованные изменения должны остановиться до `apply`;
+- человек или foreman принимает patch по evidence, а не по красивому финальному тексту.
+
 ## Для кого
 
 Подойдёт тем, кто:
@@ -282,9 +330,23 @@ preflight -> запуск Codex в ограниченном контуре -> л
 - scan на секретоподобные строки;
 - scan логов на подозрительные чтения вне проекта;
 - проверка changed files против allowed и forbidden paths;
+- блокировка грязного source checkout перед worktree-запуском;
+- запись base commit, подсказок по package manager и найденных test commands;
 - score качества доказательств от 0 до 100;
 - apply только через dry-run-first gate;
 - защита от случайного коммита реальных run-артефактов.
+
+## Что он доказывает
+
+Runner может доказать:
+
+- какие файлы изменились;
+- остались ли изменения внутри allowed paths;
+- прошли ли заданные verification commands;
+- правильно ли собран receipt/report bundle;
+- применим ли patch технически через dry-run gate.
+
+Он не доказывает, что patch правильный по смыслу. Финальное решение всё равно принимает человек или foreman.
 
 ## Как это выглядит в работе
 
@@ -407,7 +469,7 @@ Runner - не жёсткий sandbox.
 
 ## Текущий статус
 
-`v0.1.0` alpha / private staging.
+`v0.1.0` public alpha.
 
 Код runner, шаблоны, fake-Codex fixtures и тесты уже есть. Репозиторий пока лучше воспринимать как preview для guarded Codex runs, а не как законченную платформу для команды.
 

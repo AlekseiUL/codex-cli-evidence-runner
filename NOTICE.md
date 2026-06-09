@@ -10,9 +10,13 @@ Where permitted by the MIT License, if you reuse, fork, modify, package, or publ
 
 ## Scope
 
-This repository contains sanitized runner code, tests, templates, and a toy workspace for guarded OpenAI Codex CLI runs.
+This repository contains sanitized runner code, tests, templates, a toy workspace, and intentional public documentation assets for guarded OpenAI Codex CLI runs.
 
 It should not contain real run logs, private prompts, local absolute paths, credentials, account data, private customer data, or internal operational reports.
+
+Public artwork included:
+
+- `docs/assets/codex-cli-evidence-runner-flow.svg` - product flow diagram for the README.
 
 ## Third-party note
 
